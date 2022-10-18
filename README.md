@@ -1,0 +1,1 @@
+Custom Calendar & Planner app. dev. by Melihşah TÜLEK
