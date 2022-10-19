@@ -2,6 +2,7 @@
 
 window.addEventListener("load", () => {
   const tables = document.querySelector(".tables");
+  const selectsContainer = document.querySelector(".selects-container");
   const months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
   const days = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
   const breakPoint = 1024;
@@ -40,9 +41,51 @@ window.addEventListener("load", () => {
     return headerTitle;
   };
 
+  const createCustomSelect = (option) => {
+    const customSelect = document.createElement("div");
+    const title = document.createElement("div");
+    const itemsContainer = document.createElement("ul");
+
+    customSelect.setAttribute("class", `custom-select select-${option.id}`);
+    title.setAttribute("class", "custom-select-title");
+    itemsContainer.setAttribute("class", "custom-select-items");
+
+    title.textContent = option.selectedValue;
+    option.values.forEach((item, index) => {
+      const customSelectItem = document.createElement("li");
+      customSelectItem.textContent = item;
+      customSelectItem.setAttribute("data-value", option.id === "months" ? index : item);
+      itemsContainer.appendChild(customSelectItem);
+    });
+
+    customSelect.appendChild(title);
+    customSelect.appendChild(itemsContainer);
+    selectsContainer.appendChild(customSelect);
+
+    selectEvents(customSelect, itemsContainer);
+  };
+
+  const selectEvents = (customSelect, itemsContainer) => {
+    Array.from(itemsContainer.children).forEach((item, index) => {
+      item.addEventListener("click", () => {
+        // console.log(item.getAttribute("data-value"));
+      });
+    });
+  };
+
+  createCustomSelect({
+    id: "months",
+    values: months,
+    selectedValue: months[new Date().getMonth()],
+  });
+
+  createCustomSelect({
+    id: "years",
+    values: [2021, 2022, 2023],
+    selectedValue: new Date().getFullYear(),
+  });
+
   const createCalendar = (y) => {
-    console.clear();
-    console.log(isMobile());
     tables.innerHTML = null;
     for (let i = 1; i <= 12; i++) {
       const table = createTable();
@@ -51,7 +94,7 @@ window.addEventListener("load", () => {
       const headerTitle = writeDateToTitle(i - 1, y); // MONTH, YEAR TITLE
 
       table.appendChild(headerTitle);
-      console.log(months[i - 1], lastDayOfMonth);
+      // console.log(months[i - 1], lastDayOfMonth);
 
       let n = 1, // COUNTER
         control = 1, // START CONTROL

@@ -67,10 +67,57 @@ html body a {
   width: 100%;
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-wrap: wrap;
   padding: 1rem;
+}
+
+#app .selects-container {
+  width: 100%;
+  position: relative;
+}
+
+#app .selects-container .custom-select {
+  width: 200px;
+  position: relative;
+  background-color: var(--white);
+  cursor: pointer;
+  border-radius: 5px;
+  float: left;
+}
+
+#app .selects-container .custom-select:not(:first-of-type) {
+  margin-left: 1rem;
+}
+
+#app .selects-container .custom-select .custom-select-title {
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+  font-weight: 500;
+  font-size: 1.4rem;
+  color: var(--dark);
+  text-transform: capitalize;
+  width: 200px;
+  border: 1px solid rgba(0, 0, 0, 0.09);
+  border-radius: 5px;
+}
+
+#app .selects-container .custom-select .custom-select-items {
+  position: absolute;
+  width: 200px;
+  top: 55px;
+  background-color: var(--white);
+  border: 1px solid rgba(0, 0, 0, 0.09);
+  border-radius: 5px;
+}
+
+#app .selects-container .custom-select .custom-select-items > li {
+  padding: 5px 10px;
+  color: var(--gray);
+}
+
+#app .selects-container .custom-select .custom-select-items > li:not(:first-of-type) {
+  border-top: inherit;
 }
 
 #app .badge {
@@ -102,6 +149,7 @@ html body a {
   width: 100%;
   display: flex;
   flex-direction: column;
+  /* display: none; */
 }
 
 .tables .headerTitle {
