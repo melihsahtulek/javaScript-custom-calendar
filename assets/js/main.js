@@ -4,6 +4,9 @@ window.addEventListener("load", () => {
   const tables = document.querySelector(".tables");
   const months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
   const days = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
+  const breakPoint = 1024;
+
+  const isMobile = () => (window.innerWidth > breakPoint ? false : true);
 
   const createTable = () => {
     const table = document.createElement("table");
@@ -38,6 +41,9 @@ window.addEventListener("load", () => {
   };
 
   const createCalendar = (y) => {
+    console.clear();
+    console.log(isMobile());
+    tables.innerHTML = null;
     for (let i = 1; i <= 12; i++) {
       const table = createTable();
       let lastDayOfMonth = new Date(y, i, 0).getDate();
@@ -48,12 +54,14 @@ window.addEventListener("load", () => {
       console.log(months[i - 1], lastDayOfMonth);
 
       let n = 1, // COUNTER
-        control = 1; // START CONTROL
-      for (let k = 0; k <= Math.ceil((lastDayOfMonth + startDay) / 7); k++) {
+        control = 1, // START CONTROL
+        dayCounterForMobile = startDay;
+
+      for (let k = 0; k <= (isMobile() ? lastDayOfMonth - 1 : Math.ceil((lastDayOfMonth + startDay) / 7)); k++) {
         let row = createRow();
         table.appendChild(row);
 
-        if (k === 0) {
+        if (k === 0 && !isMobile()) {
           // 0. ROW FOR DAY NAMES
           for (const day of days) {
             const title = createHeadOfTable();
@@ -62,15 +70,27 @@ window.addEventListener("load", () => {
           }
         } else {
           /* CREATE EMPTY COLUMN AND FILL */
-          for (let m = 0; m < 7; m++) {
+          for (let m = 0; m < (isMobile() ? 1 : 7); m++) {
             const col = createColumn();
-            if (control > startDay) {
+            if (isMobile()) {
               if (n <= lastDayOfMonth) {
-                col.textContent = n;
+                col.textContent = `${days[dayCounterForMobile]}, ${n < 10 ? "0" + n : n}`;
                 n++;
+                if (dayCounterForMobile < days.length - 1) {
+                  dayCounterForMobile++;
+                } else {
+                  dayCounterForMobile = 0;
+                }
               }
             } else {
-              control++;
+              if (control > startDay) {
+                if (n <= lastDayOfMonth) {
+                  col.textContent = n;
+                  n++;
+                }
+              } else {
+                control++;
+              }
             }
             row.appendChild(col);
           }
@@ -78,6 +98,11 @@ window.addEventListener("load", () => {
       }
     }
   };
+
+  window.addEventListener("resize", () => {
+    console.log("Resized!");
+    createCalendar(2022);
+  });
 
   createCalendar(2022);
 });
