@@ -85,13 +85,14 @@ window.addEventListener("load", () => {
             } else {
               if (control > startDay) {
                 if (n <= lastDayOfMonth) {
-                  col.textContent = n;
+                  col.textContent = `${n < 10 ? "0" + n : n}`;
                   n++;
                 }
               } else {
                 control++;
               }
             }
+
             row.appendChild(col);
           }
         }

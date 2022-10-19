@@ -1,9 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap");
 
 :root {
-  --white: #ffffff;
-  --gray: #6c757d;
-  --dark: #343a40;
+  --white: rgb(255, 255, 255);
+  --gray: rgb(108, 117, 125);
+  --dark: rgb(52, 58, 64);
+  --red: rgb(239, 35, 60);
+  --yellow: rgb(255, 195, 0);
+  --green: rgb(14, 173, 105);
 }
 
 *,
@@ -70,7 +73,32 @@ html body a {
   padding: 1rem;
 }
 
-.tables {
+#app .badge {
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+
+#app .badge-red {
+  background-color: rgba(239, 35, 60, 0.2);
+  color: var(--red);
+}
+
+#app .badge-gray {
+  background-color: rgba(108, 117, 125, 0.2);
+  color: var(--dark);
+}
+
+#app .badge-green {
+  background-color: rgba(14, 173, 105, 0.2);
+  color: var(--green);
+}
+
+#app .badge-yellow {
+  background-color: rgba(255, 195, 0, 0.2);
+  color: #ffba08;
+}
+
+#app .tables {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -90,7 +118,7 @@ html body a {
 }
 
 .tables .table:not(:first-of-type) {
-  /* display: none; */
+  display: none;
 }
 
 .tables .table .row {
