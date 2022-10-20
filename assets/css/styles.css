@@ -109,6 +109,11 @@ html body a {
   background-color: var(--white);
   border: 1px solid rgba(0, 0, 0, 0.09);
   border-radius: 5px;
+  display: none;
+}
+
+#app .selects-container .custom-select[data-is-open="true"] .custom-select-items {
+  display: block;
 }
 
 #app .selects-container .custom-select .custom-select-items > li {
@@ -149,7 +154,6 @@ html body a {
   width: 100%;
   display: flex;
   flex-direction: column;
-  /* display: none; */
 }
 
 .tables .headerTitle {
@@ -163,10 +167,6 @@ html body a {
 .tables .table {
   width: 100%;
   border-collapse: collapse;
-}
-
-.tables .table:not(:first-of-type) {
-  display: none;
 }
 
 .tables .table .row {

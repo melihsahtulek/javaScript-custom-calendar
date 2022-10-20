@@ -1,18 +1,22 @@
 "use strict";
 
 window.addEventListener("load", () => {
-  const tables = document.querySelector(".tables");
+  const tablesContainer = document.querySelector(".tables");
   const selectsContainer = document.querySelector(".selects-container");
   const months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
   const days = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
   const breakPoint = 1024;
+  const selectedDate = {
+    year: new Date().getFullYear(),
+    month: new Date().getMonth(),
+  };
 
   const isMobile = () => (window.innerWidth > breakPoint ? false : true);
 
   const createTable = () => {
     const table = document.createElement("table");
     table.setAttribute("class", "table");
-    tables.appendChild(table);
+    tablesContainer.appendChild(table);
     return table;
   };
 
@@ -46,15 +50,17 @@ window.addEventListener("load", () => {
     const title = document.createElement("div");
     const itemsContainer = document.createElement("ul");
 
-    customSelect.setAttribute("class", `custom-select select-${option.id}`);
+    customSelect.setAttribute("class", "custom-select");
+    customSelect.setAttribute("data-is-open", false);
+    customSelect.setAttribute("data-type", option.id);
     title.setAttribute("class", "custom-select-title");
+    title.textContent = option.selectedValue;
     itemsContainer.setAttribute("class", "custom-select-items");
 
-    title.textContent = option.selectedValue;
-    option.values.forEach((item, index) => {
+    option.values.forEach((item) => {
       const customSelectItem = document.createElement("li");
       customSelectItem.textContent = item;
-      customSelectItem.setAttribute("data-value", option.id === "months" ? index : item);
+      customSelectItem.setAttribute("data-value", typeof item === "string" ? item.toLowerCase() : item);
       itemsContainer.appendChild(customSelectItem);
     });
 
@@ -66,9 +72,33 @@ window.addEventListener("load", () => {
   };
 
   const selectEvents = (customSelect, itemsContainer) => {
+    const selectType = customSelect.getAttribute("data-type");
+    customSelect.addEventListener("click", () => {
+      if (customSelect.getAttribute("data-is-open") === "true") {
+        customSelect.setAttribute("data-is-open", false);
+      } else {
+        customSelect.setAttribute("data-is-open", true);
+      }
+    });
+
     Array.from(itemsContainer.children).forEach((item, index) => {
       item.addEventListener("click", () => {
-        // console.log(item.getAttribute("data-value"));
+        let value = item.getAttribute("data-value");
+        customSelect.children[0].textContent = value;
+        switch (selectType) {
+          case "months":
+            console.log("months");
+            selectedDate.month = months.map((month) => month.toLowerCase()).indexOf(value);
+            createCalendar(selectedDate);
+            break;
+          case "years":
+            console.log("years", customSelect);
+            selectedDate.year = value;
+            selectedDate.month = 0;
+            createCalendar(selectedDate);
+          default:
+            break;
+        }
       });
     });
   };
@@ -85,59 +115,55 @@ window.addEventListener("load", () => {
     selectedValue: new Date().getFullYear(),
   });
 
-  const createCalendar = (y) => {
-    tables.innerHTML = null;
-    for (let i = 1; i <= 12; i++) {
-      const table = createTable();
-      let lastDayOfMonth = new Date(y, i, 0).getDate();
-      let startDay = new Date(y, i - 1, 1).getDay();
-      const headerTitle = writeDateToTitle(i - 1, y); // MONTH, YEAR TITLE
+  const createCalendar = (date) => {
+    tablesContainer.innerHTML = null;
+    const table = createTable();
+    let lastDayOfMonth = new Date(date.year, date.month + 1, 0).getDate();
+    let startDay = new Date(date.year, date.month, 1).getDay();
+    const headerTitle = writeDateToTitle(date.month, date.year); // MONTH, YEAR TITLE
+    table.insertAdjacentElement("beforebegin", headerTitle);
 
-      table.appendChild(headerTitle);
-      // console.log(months[i - 1], lastDayOfMonth);
+    let n = 1, // COUNTER
+      control = 1, // START CONTROL
+      dayCounterForMobile = startDay;
 
-      let n = 1, // COUNTER
-        control = 1, // START CONTROL
-        dayCounterForMobile = startDay;
+    for (let k = 0; k <= (isMobile() ? lastDayOfMonth - 1 : Math.ceil((lastDayOfMonth + startDay) / 7)); k++) {
+      let row = createRow();
+      table.appendChild(row);
 
-      for (let k = 0; k <= (isMobile() ? lastDayOfMonth - 1 : Math.ceil((lastDayOfMonth + startDay) / 7)); k++) {
-        let row = createRow();
-        table.appendChild(row);
-
-        if (k === 0 && !isMobile()) {
-          // 0. ROW FOR DAY NAMES
-          for (const day of days) {
-            const title = createHeadOfTable();
-            title.textContent = day;
-            row.appendChild(title);
-          }
-        } else {
-          /* CREATE EMPTY COLUMN AND FILL */
-          for (let m = 0; m < (isMobile() ? 1 : 7); m++) {
-            const col = createColumn();
-            if (isMobile()) {
-              if (n <= lastDayOfMonth) {
-                col.textContent = `${days[dayCounterForMobile]}, ${n < 10 ? "0" + n : n}`;
-                n++;
-                if (dayCounterForMobile < days.length - 1) {
-                  dayCounterForMobile++;
-                } else {
-                  dayCounterForMobile = 0;
-                }
-              }
-            } else {
-              if (control > startDay) {
-                if (n <= lastDayOfMonth) {
-                  col.textContent = `${n < 10 ? "0" + n : n}`;
-                  n++;
-                }
+      if (k === 0 && !isMobile()) {
+        // 0. ROW FOR DAY NAMES
+        for (const day of days) {
+          const title = createHeadOfTable();
+          title.textContent = day;
+          row.appendChild(title);
+        }
+      } else {
+        /* CREATE EMPTY COLUMN AND FILL */
+        for (let m = 0; m < (isMobile() ? 1 : 7); m++) {
+          const col = createColumn();
+          if (isMobile()) {
+            if (n <= lastDayOfMonth) {
+              col.textContent = `${days[dayCounterForMobile]}, ${n < 10 ? "0" + n : n}`;
+              n++;
+              if (dayCounterForMobile < days.length - 1) {
+                dayCounterForMobile++;
               } else {
-                control++;
+                dayCounterForMobile = 0;
               }
             }
-
-            row.appendChild(col);
+          } else {
+            if (control > startDay) {
+              if (n <= lastDayOfMonth) {
+                col.textContent = `${n < 10 ? "0" + n : n}`;
+                n++;
+              }
+            } else {
+              control++;
+            }
           }
+
+          row.appendChild(col);
         }
       }
     }
@@ -145,8 +171,8 @@ window.addEventListener("load", () => {
 
   window.addEventListener("resize", () => {
     console.log("Resized!");
-    createCalendar(2022);
+    createCalendar(selectedDate);
   });
 
-  createCalendar(2022);
+  createCalendar(selectedDate);
 });
