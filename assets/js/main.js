@@ -151,9 +151,12 @@ window.addEventListener("load", () => {
         /* CREATE EMPTY COLUMN AND FILL */
         for (let m = 0; m < (isMobile() ? 1 : 7); m++) {
           const col = createColumn();
+          const dayNumber = document.createElement("div");
+          dayNumber.setAttribute("class", "day-number");
           if (isMobile()) {
             if (n <= lastDayOfMonth) {
-              col.textContent = `${days[dayCounterForMobile]}, ${n < 10 ? "0" + n : n}`;
+              dayNumber.textContent = `${days[dayCounterForMobile]}, ${n < 10 ? "0" + n : n}`;
+              dayNumber.setAttribute("data-day", n);
               n++;
               if (dayCounterForMobile < days.length - 1) {
                 dayCounterForMobile++;
@@ -164,7 +167,8 @@ window.addEventListener("load", () => {
           } else {
             if (control > startDay) {
               if (n <= lastDayOfMonth) {
-                col.textContent = `${n < 10 ? "0" + n : n}`;
+                dayNumber.textContent = `${n < 10 ? "0" + n : n}`;
+                dayNumber.setAttribute("data-day", n);
                 n++;
               }
             } else {
@@ -172,6 +176,10 @@ window.addEventListener("load", () => {
             }
           }
 
+          if (date.month === new Date().getMonth() && parseInt(dayNumber.getAttribute("data-day")) === new Date().getDate() && date.year === new Date().getFullYear()) {
+            dayNumber.classList.add("active-day");
+          }
+          col.appendChild(dayNumber);
           row.appendChild(col);
         }
       }

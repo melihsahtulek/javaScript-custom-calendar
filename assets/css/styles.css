@@ -97,7 +97,6 @@ html body a {
   font-size: 1.4rem;
   color: var(--dark);
   text-transform: capitalize;
-  width: 200px;
   border: 1px solid rgba(0, 0, 0, 0.09);
   border-radius: 5px;
 }
@@ -127,7 +126,8 @@ html body a {
 
 #app .badge {
   padding: 5px 10px;
-  border-radius: 3px;
+  border-radius: 5px;
+  width: fit-content;
 }
 
 #app .badge-red {
@@ -171,7 +171,7 @@ html body a {
 
 .tables .table .row {
   width: 100%;
-  height: 100px;
+  height: auto;
   display: flex;
   overflow: hidden;
 }
@@ -198,20 +198,44 @@ html body a {
 }
 
 .tables .table .row td.column {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
   flex-basis: calc(100% / 7);
+  min-height: 120px;
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  color: rgba(52, 58, 64, 0.6);
+  flex-direction: column;
+  justify-content: space-between;
   font-size: 17px;
   border: 1px solid rgba(0, 0, 0, 0.09);
   background-color: var(--white);
 }
 
+.tables .table .row td.column .day-number {
+  color: rgba(52, 58, 64, 0.6);
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tables .table .row td.column .active-day {
+  border-radius: 5px;
+  background-color: var(--red);
+  color: var(--white);
+  padding: 5px;
+}
+
 /* FOR MOBILE & TABLET */
 
 @media (max-width: 1024px) {
+  #app .selects-container {
+    display: flex;
+  }
+
+  #app .selects-container .custom-select {
+    width: 100%;
+  }
+
   .tables .table {
     overflow-x: auto;
   }
@@ -222,5 +246,9 @@ html body a {
 
   .tables .table .row td.column {
     min-width: 100%;
+  }
+
+  .tables .table .row td.column .day-number {
+    width: fit-content;
   }
 }
