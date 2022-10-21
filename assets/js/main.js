@@ -57,10 +57,10 @@ window.addEventListener("load", () => {
     title.textContent = option.selectedValue;
     itemsContainer.setAttribute("class", "custom-select-items");
 
-    option.values.forEach((item) => {
+    option.values.forEach((value) => {
       const customSelectItem = document.createElement("li");
-      customSelectItem.textContent = item;
-      customSelectItem.setAttribute("data-value", typeof item === "string" ? item.toLowerCase() : item);
+      customSelectItem.textContent = value;
+      customSelectItem.setAttribute("data-value", typeof value === "string" ? value.toLowerCase() : value);
       itemsContainer.appendChild(customSelectItem);
     });
 
@@ -73,6 +73,7 @@ window.addEventListener("load", () => {
 
   const selectEvents = (customSelect, itemsContainer) => {
     const selectType = customSelect.getAttribute("data-type");
+
     customSelect.addEventListener("click", () => {
       if (customSelect.getAttribute("data-is-open") === "true") {
         customSelect.setAttribute("data-is-open", false);
@@ -81,36 +82,44 @@ window.addEventListener("load", () => {
       }
     });
 
-    Array.from(itemsContainer.children).forEach((item, index) => {
+    for (const item of itemsContainer.children) {
       item.addEventListener("click", () => {
         let value = item.getAttribute("data-value");
-        customSelect.children[0].textContent = value;
         switch (selectType) {
-          case "months":
-            console.log("months");
+          case "month":
             selectedDate.month = months.map((month) => month.toLowerCase()).indexOf(value);
+            updateSelect();
             createCalendar(selectedDate);
             break;
-          case "years":
-            console.log("years", customSelect);
-            selectedDate.year = value;
+          case "year":
+            selectedDate.year = parseInt(value);
             selectedDate.month = 0;
+            updateSelect();
             createCalendar(selectedDate);
           default:
             break;
         }
       });
-    });
+    }
+  };
+
+  const updateSelect = () => {
+    // UPDATE TO SELECT'S TITLE
+    const selects = document.querySelectorAll(".custom-select");
+    for (const select of selects) {
+      let selectType = select.getAttribute("data-type");
+      select.children[0].textContent = selectType === "month" ? months[selectedDate[selectType]] : selectedDate[selectType];
+    }
   };
 
   createCustomSelect({
-    id: "months",
+    id: "month",
     values: months,
     selectedValue: months[new Date().getMonth()],
   });
 
   createCustomSelect({
-    id: "years",
+    id: "year",
     values: [2021, 2022, 2023],
     selectedValue: new Date().getFullYear(),
   });
@@ -170,7 +179,6 @@ window.addEventListener("load", () => {
   };
 
   window.addEventListener("resize", () => {
-    console.log("Resized!");
     createCalendar(selectedDate);
   });
 
