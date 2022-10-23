@@ -36,6 +36,7 @@ html body {
   min-height: 100%;
   line-height: normal;
   color: inherit;
+  position: relative !important;
 }
 
 html body input,
@@ -223,6 +224,57 @@ html body a {
   background-color: var(--red);
   color: var(--white);
   padding: 5px;
+}
+
+.custom-modal {
+  width: 600px;
+  height: auto;
+  background-color: var(--white);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(0, 0, 0, 0.09);
+  border-radius: 5px;
+  padding: 1rem;
+  display: none;
+}
+
+.custom-modal .modal-header {
+  background-color: var(--dark);
+  border: inherit;
+  border-radius: inherit;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: inherit;
+  text-transform: capitalize;
+}
+
+.custom-modal .modal-header button.btn-close {
+  background-color: var(--red);
+  padding: 5px 15px;
+  border-radius: inherit;
+  color: var(--white);
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.custom-modal .modal-content {
+  padding: inherit;
+}
+
+.custom-modal .modal-footer {
+  background-color: var(--dark);
+  border: inherit;
+  border-radius: inherit;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: inherit;
+  text-transform: capitalize;
 }
 
 /* FOR MOBILE & TABLET */

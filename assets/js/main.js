@@ -186,9 +186,38 @@ window.addEventListener("load", () => {
     }
   };
 
+  const createModal = (modalTitle = "example title", modalContent = "content!", footerContent = "footer!") => {
+    const modal = document.createElement("div");
+    modal.setAttribute("class", "custom-modal");
+
+    const header = document.createElement("div");
+    header.setAttribute("class", "modal-header");
+
+    const title = document.createElement("h3");
+    title.textContent = modalTitle;
+
+    const closeBtn = document.createElement("button");
+    closeBtn.textContent = "X";
+    closeBtn.setAttribute("class", "btn-close");
+
+    header.append(title, closeBtn);
+
+    const content = document.createElement("div");
+    content.setAttribute("class", "modal-content");
+    content.textContent = "content";
+
+    const footer = document.createElement("div");
+    footer.setAttribute("class", "modal-footer");
+    footer.textContent = "footer";
+
+    modal.append(header, content, footer);
+    return modal;
+  };
+
   window.addEventListener("resize", () => {
     createCalendar(selectedDate);
   });
 
   createCalendar(selectedDate);
+  document.body.appendChild(createModal());
 });
