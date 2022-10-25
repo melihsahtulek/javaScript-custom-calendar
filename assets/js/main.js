@@ -2,7 +2,6 @@
 
 window.addEventListener("load", () => {
   const tablesContainer = document.querySelector(".tables");
-  const selectsContainer = document.querySelector(".selects-container");
   const months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
   const days = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
   const breakPoint = 1024;
@@ -13,62 +12,89 @@ window.addEventListener("load", () => {
 
   const isMobile = () => (window.innerWidth > breakPoint ? false : true);
 
+  const createElem = (type, attributes = {}) => {
+    const elem = document.createElement(type);
+    for (let i = 0; i < Object.entries(attributes).length; i++) {
+      elem.setAttribute(Object.keys(attributes)[i], Object.values(attributes)[i]);
+    }
+
+    return elem;
+  };
+
   const createTable = () => {
-    const table = document.createElement("table");
-    table.setAttribute("class", "table");
-    tablesContainer.appendChild(table);
+    const table = createElem("table", {
+      class: "table",
+    });
+
     return table;
   };
 
   const createRow = () => {
-    const row = document.createElement("tr");
-    row.setAttribute("class", "row");
+    const row = createElem("tr", {
+      class: "row",
+    });
+
     return row;
   };
 
   const createHeadOfTable = () => {
-    const title = document.createElement("th");
-    title.setAttribute("class", "title");
+    const title = createElem("th", {
+      class: "title",
+    });
+
     return title;
   };
 
   const createColumn = () => {
-    const col = document.createElement("td");
-    col.setAttribute("class", "column");
+    const col = createElem("td", {
+      class: "column",
+    });
+
     return col;
   };
 
   const writeDateToTitle = (m, y) => {
-    const headerTitle = document.createElement("h3");
-    headerTitle.setAttribute("class", "headerTitle");
+    const headerTitle = createElem("h3", {
+      class: "headerTitle",
+    });
     headerTitle.textContent = `${months[m]}, ${y}`;
     return headerTitle;
   };
 
   const createCustomSelect = (option) => {
-    const customSelect = document.createElement("div");
-    const title = document.createElement("div");
-    const itemsContainer = document.createElement("ul");
-
-    customSelect.setAttribute("class", "custom-select");
-    customSelect.setAttribute("data-is-open", false);
-    customSelect.setAttribute("data-type", option.id);
-    title.setAttribute("class", "custom-select-title");
-    title.textContent = option.selectedValue;
-    itemsContainer.setAttribute("class", "custom-select-items");
-
-    option.values.forEach((value) => {
-      const customSelectItem = document.createElement("li");
-      customSelectItem.textContent = value;
-      customSelectItem.setAttribute("data-value", typeof value === "string" ? value.toLowerCase() : value);
-      itemsContainer.appendChild(customSelectItem);
+    let { id, selectedValue, values, container } = option;
+    const control = document.querySelectorAll(`[data-type=${id}]`);
+    const customSelect = createElem("div", {
+      class: "custom-select",
+      "data-is-open": false,
+      "data-type": id,
     });
 
-    customSelect.appendChild(title);
-    customSelect.appendChild(itemsContainer);
-    selectsContainer.appendChild(customSelect);
+    const title = createElem("div", {
+      class: "custom-select-title",
+    });
 
-    selectEvents(customSelect, itemsContainer);
+    const itemsContainer = createElem("ul", {
+      class: "custom-select-items",
+    });
+
+    if (control.length === 0) {
+      title.textContent = selectedValue;
+
+      values.forEach((value) => {
+        const customSelectItem = createElem("li", {
+          "data-value": typeof value === "string" ? value.toLowerCase() : value,
+        });
+        customSelectItem.textContent = value;
+        itemsContainer.appendChild(customSelectItem);
+      });
+
+      customSelect.appendChild(title);
+      customSelect.appendChild(itemsContainer);
+      container.appendChild(customSelect);
+
+      selectEvents(customSelect, itemsContainer);
+    }
   };
 
   const selectEvents = (customSelect, itemsContainer) => {
@@ -116,17 +142,20 @@ window.addEventListener("load", () => {
     id: "month",
     values: months,
     selectedValue: months[new Date().getMonth()],
+    container: document.querySelector(".selects-container"),
   });
 
   createCustomSelect({
     id: "year",
     values: [2021, 2022, 2023],
     selectedValue: new Date().getFullYear(),
+    container: document.querySelector(".selects-container"),
   });
 
   const createCalendar = (date) => {
     tablesContainer.innerHTML = null;
     const table = createTable();
+    tablesContainer.appendChild(table);
     let lastDayOfMonth = new Date(date.year, date.month + 1, 0).getDate();
     let startDay = new Date(date.year, date.month, 1).getDay();
     const headerTitle = writeDateToTitle(date.month, date.year); // MONTH, YEAR TITLE
@@ -186,38 +215,9 @@ window.addEventListener("load", () => {
     }
   };
 
-  const createModal = (modalTitle = "example title", modalContent = "content!", footerContent = "footer!") => {
-    const modal = document.createElement("div");
-    modal.setAttribute("class", "custom-modal");
-
-    const header = document.createElement("div");
-    header.setAttribute("class", "modal-header");
-
-    const title = document.createElement("h3");
-    title.textContent = modalTitle;
-
-    const closeBtn = document.createElement("button");
-    closeBtn.textContent = "X";
-    closeBtn.setAttribute("class", "btn-close");
-
-    header.append(title, closeBtn);
-
-    const content = document.createElement("div");
-    content.setAttribute("class", "modal-content");
-    content.textContent = "content";
-
-    const footer = document.createElement("div");
-    footer.setAttribute("class", "modal-footer");
-    footer.textContent = "footer";
-
-    modal.append(header, content, footer);
-    return modal;
-  };
-
   window.addEventListener("resize", () => {
     createCalendar(selectedDate);
   });
 
   createCalendar(selectedDate);
-  document.body.appendChild(createModal());
 });

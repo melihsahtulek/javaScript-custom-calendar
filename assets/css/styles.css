@@ -77,7 +77,7 @@ html body a {
   position: relative;
 }
 
-#app .selects-container .custom-select {
+#app .custom-select {
   width: 200px;
   position: relative;
   background-color: var(--white);
@@ -86,11 +86,11 @@ html body a {
   float: left;
 }
 
-#app .selects-container .custom-select:not(:first-of-type) {
+#app .custom-select:not(:first-of-type) {
   margin-left: 1rem;
 }
 
-#app .selects-container .custom-select .custom-select-title {
+#app .custom-select .custom-select-title {
   height: 50px;
   text-align: center;
   line-height: 50px;
@@ -102,7 +102,7 @@ html body a {
   border-radius: 5px;
 }
 
-#app .selects-container .custom-select .custom-select-items {
+#app .custom-select .custom-select-items {
   position: absolute;
   width: 200px;
   top: 55px;
@@ -112,16 +112,16 @@ html body a {
   display: none;
 }
 
-#app .selects-container .custom-select[data-is-open="true"] .custom-select-items {
+#app .custom-select[data-is-open="true"] .custom-select-items {
   display: block;
 }
 
-#app .selects-container .custom-select .custom-select-items > li {
+#app .custom-select .custom-select-items > li {
   padding: 5px 10px;
   color: var(--gray);
 }
 
-#app .selects-container .custom-select .custom-select-items > li:not(:first-of-type) {
+#app .custom-select .custom-select-items > li:not(:first-of-type) {
   border-top: inherit;
 }
 
@@ -224,57 +224,6 @@ html body a {
   background-color: var(--red);
   color: var(--white);
   padding: 5px;
-}
-
-.custom-modal {
-  width: 600px;
-  height: auto;
-  background-color: var(--white);
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border: 1px solid rgba(0, 0, 0, 0.09);
-  border-radius: 5px;
-  padding: 1rem;
-  display: none;
-}
-
-.custom-modal .modal-header {
-  background-color: var(--dark);
-  border: inherit;
-  border-radius: inherit;
-  color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: inherit;
-  text-transform: capitalize;
-}
-
-.custom-modal .modal-header button.btn-close {
-  background-color: var(--red);
-  padding: 5px 15px;
-  border-radius: inherit;
-  color: var(--white);
-  font-weight: 500;
-  font-size: 20px;
-}
-
-.custom-modal .modal-content {
-  padding: inherit;
-}
-
-.custom-modal .modal-footer {
-  background-color: var(--dark);
-  border: inherit;
-  border-radius: inherit;
-  color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: inherit;
-  text-transform: capitalize;
 }
 
 /* FOR MOBILE & TABLET */
