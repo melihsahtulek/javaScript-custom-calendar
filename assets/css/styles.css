@@ -178,7 +178,7 @@ html body a {
 }
 
 .tables .table .row:first-of-type {
-  height: unset;
+  height: auto !important;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 }
@@ -201,7 +201,7 @@ html body a {
 .tables .table .row td.column {
   padding: 0.5rem;
   flex-basis: calc(100% / 7);
-  min-height: 120px;
+  min-height: 125px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

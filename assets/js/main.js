@@ -9,6 +9,8 @@ window.addEventListener("load", () => {
     year: new Date().getFullYear(),
     month: new Date().getMonth(),
   };
+  const words = "augue interdum velit euismod in pellentesque massa placerat duis ultricies lacus sed turpis tincidunt".split(" ");
+  const badges = ["badge-yellow", "badge-gray", "badge-green", "badge-red"];
 
   const isMobile = () => (window.innerWidth > breakPoint ? false : true);
 
@@ -180,8 +182,9 @@ window.addEventListener("load", () => {
         /* CREATE EMPTY COLUMN AND FILL */
         for (let m = 0; m < (isMobile() ? 1 : 7); m++) {
           const col = createColumn();
-          const dayNumber = document.createElement("div");
-          dayNumber.setAttribute("class", "day-number");
+          const dayNumber = createElem("div", {
+            class: "day-number",
+          });
           if (isMobile()) {
             if (n <= lastDayOfMonth) {
               dayNumber.textContent = `${days[dayCounterForMobile]}, ${n < 10 ? "0" + n : n}`;
@@ -208,7 +211,21 @@ window.addEventListener("load", () => {
           if (date.month === new Date().getMonth() && parseInt(dayNumber.getAttribute("data-day")) === new Date().getDate() && date.year === new Date().getFullYear()) {
             dayNumber.classList.add("active-day");
           }
+
+          const badge = createElem("div", {
+            class: `badge ${badges[parseInt(Math.random() * 4)]}`,
+          });
+
+          badge.textContent = words[parseInt(Math.random() * 14)];
+
           col.appendChild(dayNumber);
+          if (isMobile()) {
+            col.appendChild(badge);
+          } else {
+            if (parseInt(dayNumber.getAttribute("data-day")) === n - 1) {
+              col.appendChild(badge);
+            }
+          }
           row.appendChild(col);
         }
       }
