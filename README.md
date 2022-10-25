@@ -1,1 +1,4 @@
-Custom Calendar & Planner app. dev. by Melihşah TÜLEK
+Custom Calendar app. dev. by Melihşah TÜLEK.
+- Vanilla JavaScript
+- CSS3
+- HTML5
